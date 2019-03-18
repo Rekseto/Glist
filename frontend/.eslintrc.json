@@ -1,0 +1,53 @@
+{
+  "extends": [
+    "react-app",
+    "standard",
+    "prettier",
+    "prettier/react",
+    "prettier/standard",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "plugins": ["react", "standard", "prettier", "jsx-a11y"],
+
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+
+  "rules": {
+    "quotes": [1, "double"],
+    "indent": [0, 4],
+
+    "no-console": [0],
+    "no-param-reassign": [0],
+    "no-else-return": 0,
+    "no-confusing-arrow": 0,
+    "no-prototype-builtins": 0,
+
+    "react/display-name": [0],
+    "react/prop-types": [1],
+    "react/sort-comp": [0],
+    "react/no-danger": [0],
+    "react/jsx-indent": [2, 2],
+    "react/jsx-indent-props": [2, 2],
+    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
+
+    "prettier/prettier": 2,
+
+    "jsx-a11y/href-no-hash": [0],
+
+    "import/first": [0],
+    "import/prefer-default-export": [0],
+    "import/no-extraneous-dependencies": [0]
+  }
+}

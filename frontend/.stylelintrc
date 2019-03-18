@@ -1,0 +1,10 @@
+{
+  "syntax": "scss",
+  "extends": ["stylelint-config-standard"],
+
+  "rules": {
+    "declaration-colon-newline-after": null,
+    "declaration-empty-line-before": null,
+    "value-list-max-empty-lines": null
+  }
+}

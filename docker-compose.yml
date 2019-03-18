@@ -1,0 +1,22 @@
+version: "3.3"
+services:
+  backend:
+    build: ./backend/
+    tty: true
+    env_file:
+      - .env
+    volumes:
+      - project-log-volume:/var/project/logs
+      - project-stats-volume:/var/project/stats
+    ports:
+      - "3000:3000"
+  nginx:
+    build: ./nginx
+    tty: true
+    links:
+      - backend
+    ports:
+      - 80:80
+volumes:
+  project-log-volume:
+  project-stats-volume:
