@@ -1,4 +1,7 @@
 const Koa = require("koa");
+const body = require("koa-body");
+const cors = require("koa-cors");
+const loggerMiddleware = require("koa-logger");
 const Router = require("koa-router");
 const callDir = require("call-dir");
 const path = require("path");
@@ -36,8 +39,11 @@ async function initServer(config) {
   const logger = winstonLogger;
   const router = new Router();
   const app = new Koa();
+  app.use(loggerMiddleware());
+  app.use(body());
+  app.use(cors());
   try {
-    logger.notify(`BACKEND:${config.SERVER_ID} started`);
+    logger.notify(`BACKEND started`);
 
     const dependencies = { logger };
     const routes = path.resolve(__dirname, "./routes");
