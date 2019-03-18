@@ -1,6 +1,6 @@
 const glist = (function() {
   function getBrowser() {
-    if (!!window.chrome && !!window.chrome.webstore) {
+    if (!!window.chrome) {
       return "Google Chrome";
     } else if (typeof InstallTrigger !== "undefined") {
       return "Firefox";
@@ -17,8 +17,10 @@ const glist = (function() {
       })(!window["safari"] || safari.pushNotification)
     ) {
       return "Safari";
-    } else if (!isIE && !!window.StyleMedia) {
-      return "Microsoft Edge";
+    } else if (!!window.StyleMedia) {
+      return "Edge";
+    } else {
+      return "Unknown";
     }
   }
 
@@ -27,7 +29,7 @@ const glist = (function() {
     if (navigator.appVersion.indexOf("Mac") != -1) return "MacOS";
     if (navigator.appVersion.indexOf("X11") != -1) return "UNIX";
     if (navigator.appVersion.indexOf("Linux") != -1) return "Linux";
-    return "unknown";
+    return "Unknown";
   }
 
   function baseInformations() {
