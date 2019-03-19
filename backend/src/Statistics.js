@@ -1,6 +1,23 @@
 const fs = require("fs");
 const fsPromises = require("fs").promises;
-const fsHelpers = require("./helpers/fsHelpers");
+
+async function* chunksToLines(chunksAsync) {
+  let previous = "";
+  for await (const chunk of chunksAsync) {
+    previous += chunk;
+    let eolIndex;
+    while ((eolIndex = previous.indexOf("\r\n")) >= 0) {
+      const line = previous.slice(0, eolIndex + 1);
+
+      yield line;
+
+      previous = previous.slice(eolIndex + 1);
+    }
+  }
+  if (previous.length > 0) {
+    yield previous;
+  }
+}
 
 class Statistics {
   constructor(options) {
@@ -37,11 +54,14 @@ class Statistics {
    * @return  {Array}
    */
   async getStats(startingDate, endingDate) {
-    // @TODO
+    /*
+    @TODO
+    Consider moving metrics to database (time series data)
+    **/
     const { statsPath } = this;
     try {
       const names = await fsPromises.readdir(statsPath);
-
+      const result = [];
       for await (const name of names) {
         const date = new Date(name.substring(0, name.length - 6));
         if ((date > startingDate) & (date < endingDate)) {
@@ -50,11 +70,14 @@ class Statistics {
             highWaterMark: 1024
           });
 
-          for await (const chunk of readStream) {
-            console.log(chunk);
+          for await (const line of chunksToLines(readStream)) {
+            try {
+              result.push(JSON.parse(line.replace("\r", "").replace("\n", "")));
+            } catch (error) {}
           }
         }
       }
+      return result;
     } catch (error) {
       console.log(error);
     }
