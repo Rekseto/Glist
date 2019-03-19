@@ -1,3 +1,4 @@
+import Statistics from "./Statistics";
 const Koa = require("koa");
 const body = require("koa-body");
 const cors = require("koa-cors");
@@ -38,6 +39,10 @@ const winstonLogger = createLogger({
 async function initServer(config) {
   const logger = winstonLogger;
   const router = new Router();
+  const statistics = new Statistics({
+    statsPath: "/var/project/stats/"
+  });
+
   const app = new Koa();
   app.use(loggerMiddleware());
   app.use(body());
@@ -45,7 +50,7 @@ async function initServer(config) {
   try {
     logger.notify(`BACKEND started`);
 
-    const dependencies = { logger };
+    const dependencies = { logger, statistics };
     const routes = path.resolve(__dirname, "./routes");
     callDir.loadAll(routes, fpath => require(fpath)(router, dependencies));
 
