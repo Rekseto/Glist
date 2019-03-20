@@ -16,6 +16,20 @@ module.exports = function({ database, logger }) {
       } catch (error) {
         throw error;
       }
+    },
+    fetchInRange: async function({ startingDate, endingDate }) {
+      try {
+        const metrics = await Metric.find({
+          date: {
+            $gt: startingDate,
+            $lt: endingDate
+          }
+        });
+
+        return metrics;
+      } catch (error) {
+        throw error;
+      }
     }
   };
 };

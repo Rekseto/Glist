@@ -46,7 +46,7 @@ const glist = (function() {
     start: function({ server }) {
       window.addEventListener("DOMContentLoaded", function() {
         fetch(server, {
-          method: "POST",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json"
           },
