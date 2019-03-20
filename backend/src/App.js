@@ -1,4 +1,3 @@
-import Statistics from "./Statistics";
 const Koa = require("koa");
 const body = require("koa-body");
 const cors = require("koa-cors");
@@ -7,6 +6,8 @@ const Router = require("koa-router");
 const callDir = require("call-dir");
 const path = require("path");
 const { createLogger, format, transports } = require("winston");
+
+const { initDatabase, Database } = require("./Database");
 
 const levels = {
   info: 0, // harmless actions
@@ -20,16 +21,17 @@ const winstonLogger = createLogger({
   transports: [
     new transports.Console({ level: "notify" }),
     new transports.Console({ level: "error" }),
+    new transports.Console({ level: "critical" }),
     new transports.File({
-      filename: "/var/project/logs/notify.log",
+      filename: "/var/glist/logs/notify.log",
       level: "notify"
     }),
     new transports.File({
-      filename: "/var/project/logs/info.log",
+      filename: "/var/glist/logs/info.log",
       level: "info"
     }),
     new transports.File({
-      filename: "/var/project/logs/errors.log",
+      filename: "/var/glist/logs/errors.log",
       level: "error"
     })
   ],
@@ -38,24 +40,24 @@ const winstonLogger = createLogger({
 
 async function initServer(config) {
   const logger = winstonLogger;
+
   const router = new Router();
-  const statistics = new Statistics({
-    statsPath: "/var/project/stats/"
-  });
 
   const app = new Koa();
   app.use(loggerMiddleware());
   app.use(body());
   app.use(cors());
+  app.use(router.routes()).use(router.allowedMethods());
+  const database = initDatabase({ logger }, config);
+  logger.notify(`BACKEND started`);
   try {
-    logger.notify(`BACKEND started`);
+    await database.connect();
 
-    const dependencies = { logger, statistics };
-    const routes = path.resolve(__dirname, "./routes");
+    const dependencies = { logger, database: database };
+    const routes = path.resolve(__dirname, "api/routes");
     callDir.loadAll(routes, fpath => require(fpath)(router, dependencies));
 
-    app.use(router.routes()).use(router.allowedMethods());
-    app.listen(config.PORT);
+    app.listen(config.SERVER_PORT);
   } catch (error) {
     logger.critical(error.message);
   }
