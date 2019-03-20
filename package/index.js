@@ -36,10 +36,9 @@ const glist = (function() {
     return {
       browser: getBrowser(),
       system: getSystem(),
-      lang: navigator.language,
+      language: navigator.language,
       userAgent: navigator.userAgent,
-      languages: navigator.languages,
-      time: new Date()
+      languages: navigator.languages
     };
   }
 
