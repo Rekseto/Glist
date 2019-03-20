@@ -1,15 +1,27 @@
 version: "3.3"
 services:
+  mongo:
+    restart: always
+    image: mongo
+    volumes:
+      - glist-db-volume:/data/db
+    ports:
+      - "27017:27017"
   backend:
     build: ./backend/
     tty: true
     env_file:
       - .env
+    environment:
+      WAIT_HOSTS: mongo:27017
     volumes:
-      - project-log-volume:/var/project/logs
-      - project-stats-volume:/var/project/stats
+      - glist-log-volume:/var/glist/logs
     ports:
       - "3000:3000"
+    depends_on:
+      - mongo
+    links:
+      - mongo
   nginx:
     build: ./nginx
     tty: true
@@ -18,5 +30,5 @@ services:
     ports:
       - 80:80
 volumes:
-  project-log-volume:
-  project-stats-volume:
+  glist-log-volume:
+  glist-db-volume:
