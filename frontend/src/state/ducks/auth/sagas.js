@@ -1,30 +1,13 @@
 import {takeLatest, put, call} from "redux-saga/effects";
 import {createSagaApiCall} from "../../../helpers/reduxHelper";
-import {
-  loginReceive,
-  logoutReceive,
-  loginFailed,
-  registerFailed,
-  registerReceive
-} from "./actions";
-import {
-  registerEndpoint,
-  loginEndpoint,
-  verifyEndpoint,
-  logoutEndpoint
-} from "../endpoints";
+import {loginReceive, logoutReceive, loginFailed} from "./actions";
+
+import {loginEndpoint, verifyEndpoint, logoutEndpoint} from "../endpoints";
 const loginSagaCall = createSagaApiCall(
   loginEndpoint,
   "POST",
   loginReceive,
   loginFailed
-);
-
-const registerSagaCall = createSagaApiCall(
-  registerEndpoint,
-  "POST",
-  registerReceive,
-  registerFailed
 );
 
 export default function* authSaga() {

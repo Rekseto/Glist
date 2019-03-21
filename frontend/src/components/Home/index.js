@@ -1,12 +1,16 @@
 import React from "react";
 import {withRouter} from "react-router";
-
+import Header from "../Header";
+import VisitorsChart from "../../container/VisitorsChart";
 import "./index.css";
 class Home extends React.Component {
   render() {
     return (
-      <div>
-        <main className="container-fluid home" />
+      <div className="container">
+        <Header />
+        <main className="home">
+          <VisitorsChart />
+        </main>
       </div>
     );
   }
