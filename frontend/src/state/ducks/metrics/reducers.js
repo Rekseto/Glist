@@ -3,7 +3,7 @@ import createReducer from "../../../helpers/reducerHelper";
 
 const initialState = {
   isFetching: false,
-  metrics: "",
+  metrics: [],
   error: null
 };
 
@@ -12,6 +12,12 @@ const actionHandlers = {
     return R.evolve(R.__, state)({
       isFetching: R.T,
       error: R.always(null)
+    });
+  },
+  METRICS_FETCH_RECEIVE: (state, action) => {
+    return R.evolve(R.__, state)({
+      isFetching: R.F,
+      metrics: R.always(action.payload)
     });
   }
 };

@@ -11,9 +11,7 @@ export const metricsFetchRequest = ({startingDate, endingDate}) => ({
 
 export const metricsFetchReceive = json => ({
   type: "METRICS_FETCH_RECEIVE",
-  payload: {
-    ...json
-  }
+  payload: [...json]
 });
 
 export const metricsFetchFailed = error => ({

@@ -6,9 +6,10 @@ import {routerReducer} from "react-router-redux";
 import * as reducers from "./ducks"; // import all reducers from ducks/index.js
 
 import {authSaga} from "./ducks/auth";
+import {metricsSaga} from "./ducks/metrics";
 
 function* rootSaga() {
-  yield all([authSaga()]);
+  yield all([authSaga(), metricsSaga()]);
 }
 
 export default function configureStore() {
