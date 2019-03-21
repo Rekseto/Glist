@@ -1,18 +1,17 @@
-const monthNames = [
-  "Styczeń",
-  "Luty",
-  "Marzec",
-  "Kwiecień",
-  "Maj",
-  "Czerwiec",
-  "Lipiec",
-  "Sierpień",
-  "Wrzesień",
-  "Listopad",
-  "Listopad",
-  "Grudzien"
+export const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
 ];
-
 export function formatDate(dateStr) {
   const date = new Date(dateStr);
   const day = date.getDate();
