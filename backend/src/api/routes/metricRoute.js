@@ -2,9 +2,9 @@ const metricsServices = require("../services/metricsServices");
 
 module.exports = function(router, { logger, database }) {
   const metricService = metricsServices({ database, logger });
-  router.post("/", async (ctx, next) => {
+  router.post("/visitors", async (ctx, next) => {
     try {
-      const result = await metricService.fetchInRange(ctx.request.body);
+      const result = await metricService.fetchVisitors(ctx.request.body);
 
       ctx.body = {
         success: true,
