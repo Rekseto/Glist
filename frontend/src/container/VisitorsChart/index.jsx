@@ -1,18 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  AreaChart,
-  Area
-} from "recharts";
-
+import {LineChart, BarChart} from "react-easy-chart";
+import moment from "moment";
 import {withRouter} from "react-router";
 
 import {metricsActions} from "../../state/ducks/metrics";
@@ -22,15 +11,22 @@ import {
   getDates,
   monthNames
 } from "../../helpers/dateHelper";
+import "./index.css";
+
+const browsersColors = {
+  "Google Chrome": "#4689F4",
+  Firefox: "#F62336",
+  Opera: "",
+  Edge: "",
+  Unknown: ""
+};
 
 class VisitorsChart extends React.Component {
   componentDidMount() {
-    const startingDate = new Date();
-    const endingDate = addDays(today, -30);
-
+    const today = new Date();
     this.props.fetchMetrics({
-      startingDate,
-      endingDate
+      startingDate: addDays(today, -30),
+      endingDate: today
     });
   }
 
@@ -39,42 +35,72 @@ class VisitorsChart extends React.Component {
     const startingDate = addDays(endingDate, -30);
 
     const {metrics} = this.props;
-    const obj = {};
+
+    const visitorsDataSet = [];
 
     getDates(startingDate, endingDate).forEach(date => {
-      const prop = new Date(date).toLocaleDateString();
-      if (!obj[prop]) obj[prop] = 0;
+      const prop = moment(date).format("D-MMM-YY");
+      visitorsDataSet.push({
+        x: prop,
+        y: metrics.filter(metric => {
+          return (
+            new Date(date).toLocaleDateString() ===
+            new Date(metric.date).toLocaleDateString()
+          );
+        }).length
+      });
     });
 
-    const result = [];
+    const browsers = {};
+    const browserDataSet = [];
+
     metrics.forEach(metric => {
-      const propName = new Date(metric.date).toLocaleDateString();
-      obj[propName]++;
+      if (!metric.browser) console.log(metric);
+      if (!browsers[metric.browser]) browsers[metric.browser] = 0;
+      browsers[metric.browser]++;
     });
 
-    for (const prop in obj) {
-      const newProp = `${parseInt(prop.split(".")[0])} ${
-        monthNames[prop.split(".")[1] - 1]
-      }`;
-
-      result.push({date: newProp, visitors: obj[prop]});
+    for (const prop in browsers) {
+      browserDataSet.push({
+        x: prop,
+        y: browsers[prop],
+        color: browsersColors[prop]
+      });
     }
 
     return (
       <React.Fragment>
-        <ResponsiveContainer min-height="100" height="50%" width="80%">
-          <AreaChart
-            data={result}
-            margin={{top: 5, right: 30, left: 20, bottom: 5}}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Area type="monotone" dataKey="visitors" stroke="#8884d8" />
-          </AreaChart>
-        </ResponsiveContainer>
+        <section className="dashboard__section">
+          <h2>Visitors </h2>
+          <LineChart
+            xType={"time"}
+            dataPoints
+            axes
+            grid
+            verticalGrid
+            lineColors={["#000000"]}
+            width={700}
+            height={450}
+            data={[visitorsDataSet]}
+          />
+        </section>
+        <section className="dashboard__section">
+          <h2>Browsers</h2>
+          <BarChart
+            width="650"
+            height="300"
+            axisLabels={{x: "", y: ""}}
+            axes
+            margin={{top: 50, right: 100, bottom: 50, left: 100}}
+            colorBars
+            barWidth={5}
+            data={browserDataSet}
+          />
+          <div className="dashboard__chart" />
+        </section>
+        <section className="dashboard__section">
+          <h2>Language</h2>
+        </section>
       </React.Fragment>
     );
   }
