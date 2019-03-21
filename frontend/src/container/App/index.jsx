@@ -10,7 +10,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {isLogged, user, error} = this.props;
+    const {isLogged, user} = this.props;
 
     return (
       <React.Fragment>
@@ -22,8 +22,7 @@ class App extends React.Component {
 
 const mapStateToProps = state => ({
   isLogged: state.authStore.isLogged,
-  user: state.authStore.user,
-  error: state.errorStore.error
+  user: state.authStore.user
 });
 
 const mapDispatchToProps = dispatch => ({
