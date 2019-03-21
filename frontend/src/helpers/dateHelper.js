@@ -1,20 +1,20 @@
+const monthNames = [
+  "Styczeń",
+  "Luty",
+  "Marzec",
+  "Kwiecień",
+  "Maj",
+  "Czerwiec",
+  "Lipiec",
+  "Sierpień",
+  "Wrzesień",
+  "Listopad",
+  "Listopad",
+  "Grudzien"
+];
+
 export function formatDate(dateStr) {
   const date = new Date(dateStr);
-  const monthNames = [
-    "Styczeń",
-    "Luty",
-    "Marzec",
-    "Kwiecień",
-    "Maj",
-    "Czerwiec",
-    "Lipiec",
-    "Sierpień",
-    "Wrzesień",
-    "Listopad",
-    "Listopad",
-    "Grudzien"
-  ];
-
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
@@ -39,4 +39,16 @@ export function addDays(date, days) {
     date.getSeconds(),
     date.getMilliseconds()
   );
+}
+export function getDates(startDate, stopDate) {
+  var dateArray = new Array();
+  var currentDate = startDate;
+  while (currentDate <= stopDate) {
+    dateArray.push(currentDate);
+    currentDate = addDays(currentDate, 1);
+  }
+  return dateArray;
+}
+export function getMonth(date) {
+  return monthNames[date.getMonth];
 }
