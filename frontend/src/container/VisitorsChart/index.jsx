@@ -71,7 +71,7 @@ class VisitorsChart extends React.Component {
     return (
       <React.Fragment>
         <section className="dashboard__section">
-          <h2>Liczba wizyt na stronie</h2>
+          <h2>Visitors </h2>
           <LineChart
             xType={"time"}
             dataPoints
@@ -85,7 +85,7 @@ class VisitorsChart extends React.Component {
           />
         </section>
         <section className="dashboard__section">
-          <h2>Przeglądarki</h2>
+          <h2>Browsers</h2>
           <BarChart
             width="650"
             height="300"
@@ -99,7 +99,7 @@ class VisitorsChart extends React.Component {
           <div className="dashboard__chart" />
         </section>
         <section className="dashboard__section">
-          <h2>Język</h2>
+          <h2>Language</h2>
         </section>
       </React.Fragment>
     );
