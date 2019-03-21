@@ -1,21 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
-
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  BarChart,
-  Bar
-} from "recharts";
-
+import {LineChart, BarChart} from "react-easy-chart";
+import moment from "moment";
 import {withRouter} from "react-router";
 
 import {metricsActions} from "../../state/ducks/metrics";
@@ -25,6 +11,15 @@ import {
   getDates,
   monthNames
 } from "../../helpers/dateHelper";
+import "./index.css";
+
+const browsersColors = {
+  "Google Chrome": "#4689F4",
+  Firefox: "#F62336",
+  Opera: "",
+  Edge: "",
+  Unknown: ""
+};
 
 class VisitorsChart extends React.Component {
   componentDidMount() {
@@ -41,14 +36,13 @@ class VisitorsChart extends React.Component {
 
     const {metrics} = this.props;
 
-    const dataSet = [];
+    const visitorsDataSet = [];
 
     getDates(startingDate, endingDate).forEach(date => {
-      const prop = new Date(date).toLocaleDateString();
-
-      dataSet.push({
-        date: prop,
-        visitors: metrics.filter(metric => {
+      const prop = moment(date).format("D-MMM-YY");
+      visitorsDataSet.push({
+        x: prop,
+        y: metrics.filter(metric => {
           return (
             new Date(date).toLocaleDateString() ===
             new Date(metric.date).toLocaleDateString()
@@ -57,26 +51,56 @@ class VisitorsChart extends React.Component {
       });
     });
 
+    const browsers = {};
+    const browserDataSet = [];
+
+    metrics.forEach(metric => {
+      if (!metric.browser) console.log(metric);
+      if (!browsers[metric.browser]) browsers[metric.browser] = 0;
+      browsers[metric.browser]++;
+    });
+
+    for (const prop in browsers) {
+      browserDataSet.push({
+        x: prop,
+        y: browsers[prop],
+        color: browsersColors[prop]
+      });
+    }
+
     return (
       <React.Fragment>
-        <ResponsiveContainer min-height="100" height="50%" width="80%">
+        <section className="dashboard__section">
+          <h2>Liczba wizyt na stronie</h2>
           <LineChart
-            data={dataSet}
-            margin={{top: 5, right: 30, left: 20, bottom: 5}}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="visitors"
-              stroke="#8884d8"
-              strokeWidth="4"
-            />
-          </LineChart>
-        </ResponsiveContainer>
+            xType={"time"}
+            dataPoints
+            axes
+            grid
+            verticalGrid
+            lineColors={["#000000"]}
+            width={700}
+            height={450}
+            data={[visitorsDataSet]}
+          />
+        </section>
+        <section className="dashboard__section">
+          <h2>Przeglądarki</h2>
+          <BarChart
+            width="650"
+            height="300"
+            axisLabels={{x: "", y: ""}}
+            axes
+            margin={{top: 50, right: 100, bottom: 50, left: 100}}
+            colorBars
+            barWidth={5}
+            data={browserDataSet}
+          />
+          <div className="dashboard__chart" />
+        </section>
+        <section className="dashboard__section">
+          <h2>Język</h2>
+        </section>
       </React.Fragment>
     );
   }
