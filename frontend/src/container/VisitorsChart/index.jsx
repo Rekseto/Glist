@@ -7,52 +7,74 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area
 } from "recharts";
 
 import {withRouter} from "react-router";
 
 import {metricsActions} from "../../state/ducks/metrics";
-import {addDays} from "../../helpers/dateHelper";
+import {
+  addDays,
+  formatDate,
+  getDates,
+  monthNames
+} from "../../helpers/dateHelper";
 
 class VisitorsChart extends React.Component {
   componentDidMount() {
-    const today = new Date();
+    const startingDate = new Date();
+    const endingDate = addDays(today, -30);
+
     this.props.fetchMetrics({
-      startingDate: addDays(today, -30),
-      endingDate: today
+      startingDate,
+      endingDate
     });
   }
 
   render() {
+    const endingDate = new Date();
+    const startingDate = addDays(endingDate, -30);
+
     const {metrics} = this.props;
     const obj = {};
 
-    metrics.forEach(metric => {
-      const metricDateDay = new Date(metric.date).getDate();
-      if (!obj[metricDateDay]) obj[metricDateDay] = 0;
-      obj[metricDateDay]++;
+    getDates(startingDate, endingDate).forEach(date => {
+      const prop = new Date(date).toLocaleDateString();
+      if (!obj[prop]) obj[prop] = 0;
     });
-    const data = [];
+
+    const result = [];
+    metrics.forEach(metric => {
+      const propName = new Date(metric.date).toLocaleDateString();
+      obj[propName]++;
+    });
+
     for (const prop in obj) {
-      data.push({date: prop + " Day", count: obj[prop]});
+      const newProp = `${parseInt(prop.split(".")[0])} ${
+        monthNames[prop.split(".")[1] - 1]
+      }`;
+
+      result.push({date: newProp, visitors: obj[prop]});
     }
 
     return (
       <React.Fragment>
-        <LineChart
-          width={730}
-          height={250}
-          data={data}
-          margin={{top: 5, right: 30, left: 20, bottom: 5}}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="linearClosed" dataKey="count" stroke="#8884d8" />
-        </LineChart>
+        <ResponsiveContainer min-height="100" height="50%" width="80%">
+          <AreaChart
+            data={result}
+            margin={{top: 5, right: 30, left: 20, bottom: 5}}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Area type="monotone" dataKey="visitors" stroke="#8884d8" />
+          </AreaChart>
+        </ResponsiveContainer>
       </React.Fragment>
     );
   }
