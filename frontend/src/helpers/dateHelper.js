@@ -28,3 +28,15 @@ export function dateDiffrence(dateOne, dateSecond) {
 
   return ((timestampOne - timestampSecond) / 1000 / 60 / 60 / 24).toFixed(0);
 }
+
+export function addDays(date, days) {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + days,
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getMilliseconds()
+  );
+}
