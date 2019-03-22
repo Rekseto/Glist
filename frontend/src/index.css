@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: auto;
+  background: #ffffff;
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+}
+
+.container {
+  display: flex;
+}
