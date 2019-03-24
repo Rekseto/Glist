@@ -1,0 +1,44 @@
+.loginPage__form {
+  width: fit-content;
+  height: fit-content;
+
+  margin-top: 15vh;
+  padding: 90px 85px 90px 85px;
+
+  border: 2px solid #9f1414;
+  border-radius: 8px;
+
+  color: white;
+  background: #991313;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+}
+
+.loginPage__inputGroup {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 0 25px 0;
+  align-items: center;
+}
+
+.loginPage__textInput {
+  width: 100%;
+  border-radius: 4px;
+  border: 5px solid #f5f5f5;
+  padding: 5px;
+  background: white !important;
+}
+.loginPage__textInput:-webkit-autofill {
+  background-color: white !important;
+}
+
+.loginPage__submit {
+  border: 0;
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 8px;
+  background: white;
+  color: black;
+}

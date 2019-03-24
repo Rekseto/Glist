@@ -43,11 +43,40 @@ export const logoutFailed = error => ({
   error
 });
 
+export const registerRequest = (username, password, email, permission) => ({
+  type: "AUTH_REGISTER_REQUEST",
+  payload: {
+    username,
+    password,
+    email,
+    permission
+  },
+  headers: {
+    "Content-Type": "application/json; charset=utf-8"
+  }
+});
+
+export const registerReceive = json => ({
+  type: "AUTH_REGISTER_RECEIVE",
+  payload: {
+    ...json
+  }
+});
+
+export const registerFailed = error => ({
+  type: "AUTH_REGISTER_FAILED",
+  error
+});
+
 export default {
   loginRequest,
   loginReceive,
   loginFailed,
 
   logoutRequest,
-  logoutReceive
+  logoutReceive,
+
+  registerRequest,
+  registerReceive,
+  registerFailed
 };
