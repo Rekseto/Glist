@@ -1,6 +1,6 @@
 const glist = (function() {
   function getBrowser() {
-    if (!!window.chrome) {
+    if (!!window.chrome && navigator.appVersion.indexOf("OPR") === -1) {
       return "Google Chrome";
     } else if (typeof InstallTrigger !== "undefined") {
       return "Firefox";
