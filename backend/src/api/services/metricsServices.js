@@ -17,7 +17,7 @@ module.exports = function({ database, logger }) {
         throw error;
       }
     },
-    fetchVisitors: async function({ startingDate, endingDate }) {
+    fetchMetrics: async function({ startingDate, endingDate }) {
       try {
         const metrics = await Metric.find({
           date: {
