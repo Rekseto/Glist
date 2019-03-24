@@ -17,7 +17,7 @@ module.exports = function({ database, logger }) {
         throw error;
       }
     },
-    fetchInRange: async function({ startingDate, endingDate }) {
+    fetchVisitors: async function({ startingDate, endingDate }) {
       try {
         const metrics = await Metric.find({
           date: {
@@ -25,7 +25,6 @@ module.exports = function({ database, logger }) {
             $lt: endingDate
           }
         });
-
         return metrics;
       } catch (error) {
         throw error;
