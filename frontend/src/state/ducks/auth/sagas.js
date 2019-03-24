@@ -1,8 +1,18 @@
 import {takeLatest, put, call} from "redux-saga/effects";
 import {createSagaApiCall} from "../../../helpers/reduxHelper";
-import {loginReceive, logoutReceive, loginFailed} from "./actions";
-
-import {loginEndpoint, verifyEndpoint, logoutEndpoint} from "../endpoints";
+import {
+  loginReceive,
+  logoutReceive,
+  loginFailed,
+  registerFailed,
+  registerReceive
+} from "./actions";
+import {
+  registerEndpoint,
+  loginEndpoint,
+  verifyEndpoint,
+  logoutEndpoint
+} from "../endpoints";
 const loginSagaCall = createSagaApiCall(
   loginEndpoint,
   "POST",
@@ -10,8 +20,16 @@ const loginSagaCall = createSagaApiCall(
   loginFailed
 );
 
+const registerSagaCall = createSagaApiCall(
+  registerEndpoint,
+  "POST",
+  registerReceive,
+  registerFailed
+);
+
 export default function* authSaga() {
   yield takeLatest("AUTH_LOGIN_REQUEST", loginSagaCall);
+  yield takeLatest("AUTH_REGISTER_REQUEST", registerSagaCall);
   yield takeLatest("AUTH_LOGOUT_REQUEST", function*(action) {
     try {
       localStorage.removeItem("token");
