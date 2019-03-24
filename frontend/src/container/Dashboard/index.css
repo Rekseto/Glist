@@ -1,0 +1,22 @@
+.dashboard__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  width: 100%;
+}
+
+.dasboard__doubleContainer {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 1em;
+}
+
+@media (max-width: 1024px) {
+  .dasboard__doubleContainer {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: 1em;
+  }
+}
