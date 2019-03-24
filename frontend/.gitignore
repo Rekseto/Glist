@@ -1,12 +1,1 @@
-/dist
-
-logs
-*.log
-
-npm-debug.log*
-
 node_modules/
-jspm_packages/
-.env
-
-/.vscode/
