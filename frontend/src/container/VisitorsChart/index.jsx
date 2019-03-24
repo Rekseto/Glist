@@ -1,10 +1,20 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {LineChart, BarChart} from "react-easy-chart";
-import moment from "moment";
 import {withRouter} from "react-router";
-
 import {metricsActions} from "../../state/ducks/metrics";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell
+} from "recharts";
 import {
   addDays,
   formatDate,
@@ -12,11 +22,10 @@ import {
   monthNames
 } from "../../helpers/dateHelper";
 import "./index.css";
-
 const browsersColors = {
   "Google Chrome": "#4689F4",
-  Firefox: "#F62336",
-  Opera: "",
+  Firefox: "#FF6611",
+  Opera: "#D81024",
   Edge: "",
   Unknown: ""
 };
@@ -39,10 +48,9 @@ class VisitorsChart extends React.Component {
     const visitorsDataSet = [];
 
     getDates(startingDate, endingDate).forEach(date => {
-      const prop = moment(date).format("D-MMM-YY");
       visitorsDataSet.push({
-        x: prop,
-        y: metrics.filter(metric => {
+        x: new Date(date).toLocaleDateString(),
+        visitors: metrics.filter(metric => {
           return (
             new Date(date).toLocaleDateString() ===
             new Date(metric.date).toLocaleDateString()
@@ -62,9 +70,23 @@ class VisitorsChart extends React.Component {
 
     for (const prop in browsers) {
       browserDataSet.push({
-        x: prop,
-        y: browsers[prop],
+        browser: prop,
+        count: browsers[prop],
         color: browsersColors[prop]
+      });
+    }
+
+    const language = {};
+    const languageDataSet = [];
+
+    metrics.forEach(metric => {
+      if (!language[metric.language]) language[metric.language] = 0;
+      language[metric.language]++;
+    });
+    for (const prop in language) {
+      languageDataSet.push({
+        language: prop,
+        count: language[prop]
       });
     }
 
@@ -72,34 +94,75 @@ class VisitorsChart extends React.Component {
       <React.Fragment>
         <section className="dashboard__section">
           <h2>Visitors </h2>
-          <LineChart
-            xType={"time"}
-            dataPoints
-            axes
-            grid
-            verticalGrid
-            lineColors={["#000000"]}
-            width={700}
-            height={450}
-            data={[visitorsDataSet]}
-          />
+
+          <ResponsiveContainer min-height="100" height="50%" width="80%">
+            <LineChart
+              data={visitorsDataSet}
+              margin={{top: 5, right: 30, left: 20, bottom: 5}}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="x" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="linear"
+                dataKey="visitors"
+                stroke="#8884d8"
+                strokeWidth="4"
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </section>
         <section className="dashboard__section">
           <h2>Browsers</h2>
           <BarChart
-            width="650"
-            height="300"
-            axisLabels={{x: "", y: ""}}
-            axes
-            margin={{top: 50, right: 100, bottom: 50, left: 100}}
-            colorBars
-            barWidth={5}
+            width={500}
+            height={300}
             data={browserDataSet}
-          />
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="browser" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#8884d8" barSize={30}>
+              {browserDataSet.map((entry, index) => {
+                return <Cell key={`cell-${index}`} fill={entry.color} />;
+              })}
+            </Bar>
+          </BarChart>
           <div className="dashboard__chart" />
         </section>
         <section className="dashboard__section">
           <h2>Language</h2>
+
+          <BarChart
+            width={500}
+            height={300}
+            data={languageDataSet}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="language" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="count" fill="#8884d8" barSize={30}>
+              {languageDataSet.map((entry, index) => {
+                return <Cell key={`cell-${index}`} fill={entry.color} />;
+              })}
+            </Bar>
+          </BarChart>
         </section>
       </React.Fragment>
     );
