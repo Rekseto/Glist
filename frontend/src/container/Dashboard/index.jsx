@@ -21,6 +21,7 @@ import {addDays, getDates} from "../../helpers/dateHelper";
 import "./index.css";
 import DashBoardCharts from "../../components/DashboardCharts";
 import {authActions} from "../../state/ducks/auth";
+import {countByField} from "../../helpers/dataHelper";
 const browsersColors = {
   "Google Chrome": "#4689F4",
   Firefox: "#FF6611",
@@ -77,24 +78,7 @@ class Dashboard extends React.Component {
         }).length
       });
     });
-
-    const browsers = {};
-    const browserDataSet = [];
-
-    metrics.forEach(metric => {
-      if (!metric.browser) console.log(metric);
-      if (!browsers[metric.browser]) browsers[metric.browser] = 0;
-      browsers[metric.browser]++;
-    });
-
-    for (const prop in browsers) {
-      browserDataSet.push({
-        browser: prop,
-        count: browsers[prop],
-        color: browsersColors[prop]
-      });
-    }
-
+    const browserDataSet = countByField("browser", metrics);
     const language = {};
     const languageDataSet = [];
 
