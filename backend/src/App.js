@@ -48,14 +48,18 @@ async function initServer(config) {
   app.use(body());
   app.use(cors());
   app.use(router.routes()).use(router.allowedMethods());
+
   const database = initDatabase({ logger }, config);
   logger.notify(`BACKEND started`);
   try {
     await database.connect();
 
     const dependencies = { logger, database: database };
+
+    const scripts = path.resolve(__dirname, "./api/scripts");
     const routes = path.resolve(__dirname, "api/routes");
     callDir.loadAll(routes, fpath => require(fpath)(router, dependencies));
+    callDir.loadAll(scripts, fpath => require(fpath)({ database, logger }));
 
     app.listen(config.SERVER_PORT);
   } catch (error) {
