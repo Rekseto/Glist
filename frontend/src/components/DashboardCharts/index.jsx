@@ -41,16 +41,11 @@ class DashboardCharts extends React.Component {
   render() {
     const colors = ["#4DA0FD", "#C5DEFE", "#8EC2FD", "#FC2847"];
 
-    const {
-      logout,
-      visitorsDataSet,
-      browserDataSet,
-      languageDataSet
-    } = this.props;
+    const {visitorsDataSet, browserDataSet, languageDataSet} = this.props;
+
     return (
       <React.Fragment>
         <div className="dashboard__container">
-          <Header logout={logout} />
           <main className="main">
             <section className="dashboard__section">
               <h2>Visitors </h2>
@@ -90,7 +85,7 @@ class DashboardCharts extends React.Component {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="browser" />
+                  <XAxis dataKey="x" />
                   <YAxis />
                   <Tooltip />
                   <Bar dataKey="count" fill="#8884d8" barSize={30}>
@@ -118,7 +113,7 @@ class DashboardCharts extends React.Component {
                   }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="language" />
+                  <XAxis dataKey="x" />
                   <YAxis />
                   <Tooltip />
                   <Bar dataKey="count" fill="#8884d8" barSize={30}>

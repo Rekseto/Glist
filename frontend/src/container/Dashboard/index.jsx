@@ -89,7 +89,7 @@ class Dashboard extends React.Component {
     });
     for (const prop in language) {
       languageDataSet.push({
-        language: prop,
+        x: prop,
         count: language[prop]
       });
     }
@@ -102,7 +102,10 @@ class Dashboard extends React.Component {
     };
     return (
       <React.Fragment>
-        <DashBoardCharts {...chartsProps} />
+        <div className="container">
+          <Header logout={this.logout} />
+          <DashBoardCharts {...chartsProps} />
+        </div>
       </React.Fragment>
     );
   }

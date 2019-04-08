@@ -9,7 +9,7 @@ export default ({logout}) => {
       <nav className="navigation">
         <ul className="navigation__list">
           <li className="navigation__element">
-            <button className="profileBar__btn" onClick={logout}>
+            <button className="header_logoutBtn" onClick={logout}>
               Logout
             </button>
           </li>
